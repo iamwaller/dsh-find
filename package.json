@@ -1,6 +1,6 @@
 {
   "name": "dsh-find",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "In-conversation find for DSH: searches the complete session history through the host session-query service, highlights every hit in the transcript and walks through them with Enter.",
   "type": "module",
   "license": "MIT",

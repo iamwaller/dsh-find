@@ -64,7 +64,7 @@ function installFakeDocument() {
   return created;
 }
 
-const { pointAt, groupRanges, indexOfSeq, queryPattern } = loadBundle();
+const { pointAt, groupRanges, snippetTokens, snippetProbe, textMatchesProbe, queryPattern } = loadBundle();
 
 function entryOf(chunks) {
   const parts = [];
@@ -127,13 +127,29 @@ test("every occurrence in a block is returned in order", () => {
   assert.equal(ranges[1].start.offset, 5);
 });
 
-test("indexOfSeq finds the first hit of a message", () => {
-  const hits = [
-    { seq: 3, range: null },
-    { seq: 3, range: null },
-    { seq: 8, range: null },
-  ];
-  assert.equal(indexOfSeq(hits, 3), 0);
-  assert.equal(indexOfSeq(hits, 8), 2);
-  assert.equal(indexOfSeq(hits, 9), -1);
+test("snippetTokens ignores markdown that the rendered node no longer has", () => {
+  const tokens = snippetTokens("…或 `conversation-find`。\\n- 关闭该行后，该行的插件都会卸载");
+  assert.ok(tokens.includes("conversation"));
+  assert.ok(tokens.includes("关闭该行后"));
+  assert.ok(tokens.every((token) => token.length >= 2));
+  assert.ok(!tokens.some((token) => token.includes("`")));
+});
+
+test("snippetProbe keeps a short, distinctive head", () => {
+  assert.equal(snippetProbe("…"), null);
+  assert.equal(snippetProbe(null), null);
+  const probe = snippetProbe("卸载 之后 该行 的 插件 都会 卸载 对应的 配置页 也会 消失");
+  assert.ok(probe.length <= 8);
+  assert.equal(probe[0], "卸载");
+  const long = snippetProbe("甲".repeat(40));
+  assert.deepEqual(long, ["甲".repeat(40)]);
+});
+
+test("textMatchesProbe survives the markdown/HTML gap", () => {
+  const snippet = "…```powershell\ncd D:\\lightwork\\dsh-test\\dsh-plugins\nnode deploy.mjs --dry-run\n```";
+  const probe = snippetProbe(snippet);
+  const rendered = "cd D:\\lightwork\\dsh-test\\dsh-plugins node deploy.mjs --dry-run 查看将写入的内容";
+  assert.equal(textMatchesProbe(rendered, probe), true);
+  const unrelated = "这段消息讲的是医保对账和单边账退费，与部署脚本无关";
+  assert.equal(textMatchesProbe(unrelated, probe), false);
 });
