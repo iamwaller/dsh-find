@@ -1,0 +1,71 @@
+{
+  "name": "dsh-find",
+  "version": "0.2.0",
+  "description": "In-conversation find for DSH: searches the complete session history through the host session-query service, highlights every hit in the transcript and walks through them with Enter.",
+  "type": "module",
+  "license": "MIT",
+  "author": "itiswaller",
+  "main": "lib/index.js",
+  "icon": "./icon.svg",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./locale/*.json": "./locale/*.json",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/client.js",
+    "lib/search-core.js",
+    "cordis.patch.yml",
+    "locale",
+    "icon.svg",
+    "README.md",
+    "README.zh.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "cordis",
+    "find",
+    "search",
+    "session"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iamwaller/dsh-find.git"
+  },
+  "homepage": "https://github.com/iamwaller/dsh-find#readme",
+  "bugs": {
+    "url": "https://github.com/iamwaller/dsh-find/issues"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "engines": {
+    "node": ">=20",
+    "dsh": "^0.2.2-rc.1"
+  },
+  "scripts": {
+    "test": "node --test tests/search-core.test.mjs tests/host-route.test.mjs tests/page-scan.test.mjs",
+    "prepublishOnly": "node scripts/prepublish.mjs"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "inject": [
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-slots",
+        "@deepseek-ai/dsh-client-ui-conversation",
+        "@deepseek-ai/dsh-client-ui-chat"
+      ],
+      "platform": "web"
+    },
+    "manifestVersion": 1
+  }
+}

@@ -1,0 +1,7 @@
+# Bundle layer for dsh-find.
+# One row per feature; the row points at this same package, which also carries
+# the browser half through `dsh.client`. No config: the row switch is the only
+# setting this plugin has.
+- insert:
+    - id: conversation-find
+      name: 'dsh-find'
