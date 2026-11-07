@@ -2,8 +2,6 @@
 
 Find inside a DSH session: searches the **complete session history** (including turns that are not loaded yet), highlights every hit in the transcript, and walks through them with `Enter`.
 
-One package is both the bundle (it declares the `conversation-find` row) and the feature itself, so installing it gives you a card on the Plugins page.
-
 ## What you get
 
 - A **search icon in the session header**, plus a shortcut:
